@@ -43,7 +43,7 @@ public class PessoaService {
 
 	public void readAll() {
 		List<Pessoa> listagem = this.repository.readAll();
-		if (!listagem.isEmpty() || listagem == null) {
+		if (listagem.isEmpty() || listagem == null) {
 			throw new CadastrosInexistentes("\nAinda não existem cadastros.");
 		} else {
 			listagem.stream().map(a -> a + "\n").forEach(System.out::println);

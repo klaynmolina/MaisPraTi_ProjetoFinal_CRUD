@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.Scanner;
 
 import crud.complementos.Formatacao;
+import crud.exceptions.CadastroInvalido;
 import crud.model.Aluno;
 import crud.model.Pessoa;
 import crud.service.AlunoService;
@@ -29,29 +30,40 @@ public class menus {
 		read.nextLine();
 		System.out.print("\nNome: ");
 		String nome = read.nextLine();
-		System.out.print("\nTelefone com DDD: ");
+		System.out.print("\nTelefone com DDD (11 digitos): ");
 		String telefone = read.nextLine();
-		System.out.print("\nData de nascimento: ");
+		System.out.print("\nData de nascimento (dd/MM/yyyy): ");
 		String dataNascimento = read.nextLine();
 
 		System.out.print("\nDeseja informar nota final do curso? 1. Sim / 2. Não ");
 		int resposta = read.nextInt();
 
-		if (resposta == 1) {
-			System.out.print("\nNota Final: ");
-			Double notaFinal = read.nextDouble();
+		if (resposta == 1 || resposta == 2) {
+			if (resposta == 1) {
+				System.out.print("\nNota Final (Separação com vírgula): ");
+				Double notaFinal = read.nextDouble();
 
-			Aluno aluno = new Aluno(nome, telefone, dataNascimento, notaFinal);
-			alunoService.create(aluno);
-			System.out.println(aluno);
-			System.out.println("\nCadastro salvo com sucesso.");
+				Aluno aluno = new Aluno(nome, telefone, dataNascimento, notaFinal);
+				if (aluno.getNome().isBlank()) {
+					throw new CadastroInvalido("\nCampo nome está em branco. Cadastro inválido.");
+				} else {
+					alunoService.create(aluno);
+					System.out.println(aluno);
+					System.out.println("\nCadastro salvo com sucesso.");
+				}
+			} else {
+				Pessoa pessoa = new Pessoa(nome, telefone, dataNascimento);
+				if (pessoa.getNome().isBlank()) {
+					throw new CadastroInvalido("\nCampo nome está em branco. Cadastro inválido.");
+				} else {
+					pessoaService.create(pessoa);
+					System.out.println(pessoa);
+					System.out.println("\nCadastro salvo com sucesso.");
+				}
+			}
 		} else {
-			Pessoa pessoa = new Pessoa(nome, telefone, dataNascimento);
-			pessoaService.create(pessoa);
-			System.out.println(pessoa);
-			System.out.println("\nCadastro salvo com sucesso.");
+			System.out.println("\nOpção Inválida.");
 		}
-
 	}
 
 	public static void todosOsCadastros(PessoaService pessoaService, AlunoService alunoService) {
@@ -78,8 +90,8 @@ public class menus {
 			read.nextLine();
 			System.out.print("\nAtualizar nome: ");
 			String novoNome = read.nextLine();
-			
-			if (escolhaAtualizar == 1) {				
+
+			if (escolhaAtualizar == 1) {
 				Pessoa atualizarPessoa = pessoaService.readById(atualizarId);
 				atualizarPessoa.setNome(novoNome);
 				pessoaService.update(atualizarId, atualizarPessoa);

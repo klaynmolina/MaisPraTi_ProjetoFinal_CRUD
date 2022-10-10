@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import crud.complementos.Inicializar;
 import crud.exceptions.CadastroDuplicado;
 import crud.exceptions.CadastroInvalido;
 import crud.exceptions.CadastrosInexistentes;
@@ -22,8 +23,8 @@ public class Programa {
 		AlunoService alunoService = new AlunoService(read);
 
 		// INICIALIZAÇÃO PRONTA
-		// Inicializar.iniciarAluno(alunoService);
-		// Inicializar.iniciarPessoa(pessoaService);
+		//Inicializar.iniciarAluno(alunoService);
+		//Inicializar.iniciarPessoa(pessoaService);
 
 		boolean controle = true;
 		do {
