@@ -1,11 +1,11 @@
-package primeira.versao.repository;
+package crud.repository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import primeira.versao.model.Pessoa;
+import crud.model.Pessoa;
 
 
 public class Repository<T extends Pessoa> {

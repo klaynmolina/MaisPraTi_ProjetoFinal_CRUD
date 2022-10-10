@@ -1,15 +1,15 @@
-package primeira.versao.service;
+package crud.service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import primeira.versao.exceptions.CadastroDuplicado;
-import primeira.versao.exceptions.CadastroInvalido;
-import primeira.versao.exceptions.CadastrosInexistentes;
-import primeira.versao.exceptions.IdInexistente;
-import primeira.versao.model.Pessoa;
-import primeira.versao.repository.Repository;
+import crud.exceptions.CadastroDuplicado;
+import crud.exceptions.CadastroInvalido;
+import crud.exceptions.CadastrosInexistentes;
+import crud.exceptions.IdInexistente;
+import crud.model.Pessoa;
+import crud.repository.Repository;
 
 public class PessoaService {
 

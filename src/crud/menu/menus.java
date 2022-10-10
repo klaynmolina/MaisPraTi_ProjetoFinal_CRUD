@@ -1,13 +1,13 @@
-package primeira.versao.menu;
+package crud.menu;
 
 import java.text.ParseException;
 import java.util.Scanner;
 
-import primeira.versao.complementos.Formatacao;
-import primeira.versao.model.Aluno;
-import primeira.versao.model.Pessoa;
-import primeira.versao.service.AlunoService;
-import primeira.versao.service.PessoaService;
+import crud.complementos.Formatacao;
+import crud.model.Aluno;
+import crud.model.Pessoa;
+import crud.service.AlunoService;
+import crud.service.PessoaService;
 
 public class menus {
 

@@ -1,8 +1,8 @@
-package primeira.versao.model;
+package crud.model;
 
 import java.text.ParseException;
 
-import primeira.versao.complementos.Formatacao;
+import crud.complementos.Formatacao;
 
 public class Aluno extends Pessoa {
 	

@@ -1,4 +1,4 @@
-package primeira.versao.exceptions;
+package crud.exceptions;
 
 public class IdInexistente extends RuntimeException {
 

@@ -1,16 +1,16 @@
-package primeira.versao.main;
+package crud.main;
 
 import java.text.ParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import primeira.versao.exceptions.CadastroDuplicado;
-import primeira.versao.exceptions.CadastroInvalido;
-import primeira.versao.exceptions.CadastrosInexistentes;
-import primeira.versao.exceptions.IdInexistente;
-import primeira.versao.menu.menus;
-import primeira.versao.service.AlunoService;
-import primeira.versao.service.PessoaService;
+import crud.exceptions.CadastroDuplicado;
+import crud.exceptions.CadastroInvalido;
+import crud.exceptions.CadastrosInexistentes;
+import crud.exceptions.IdInexistente;
+import crud.menu.menus;
+import crud.service.AlunoService;
+import crud.service.PessoaService;
 
 public class Programa {
 

@@ -1,9 +1,9 @@
-package primeira.versao.model;
+package crud.model;
 
 import java.text.ParseException;
 import java.util.Date;
 
-import primeira.versao.complementos.Formatacao;
+import crud.complementos.Formatacao;
 
 public class Pessoa { 
 	

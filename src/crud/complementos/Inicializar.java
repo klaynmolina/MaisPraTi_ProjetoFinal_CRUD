@@ -1,11 +1,11 @@
-package primeira.versao.complementos;
+package crud.complementos;
 
 import java.text.ParseException;
 
-import primeira.versao.model.Aluno;
-import primeira.versao.model.Pessoa;
-import primeira.versao.service.AlunoService;
-import primeira.versao.service.PessoaService;
+import crud.model.Aluno;
+import crud.model.Pessoa;
+import crud.service.AlunoService;
+import crud.service.PessoaService;
 
 public class Inicializar {
 	
