@@ -8,7 +8,7 @@ import crud.complementos.Inicializar;
 import crud.exceptions.CadastroDuplicado;
 import crud.exceptions.CadastroInvalido;
 import crud.exceptions.CadastrosInexistentes;
-import crud.exceptions.IdInexistente;
+import crud.exceptions.TelefoneInexistente;
 import crud.menu.menus;
 import crud.service.AlunoService;
 import crud.service.PessoaService;
@@ -23,8 +23,8 @@ public class Programa {
 		AlunoService alunoService = new AlunoService(read);
 
 		// INICIALIZAÇÃO PRONTA
-		//Inicializar.iniciarAluno(alunoService);
-		//Inicializar.iniciarPessoa(pessoaService);
+		Inicializar.iniciarAluno(alunoService);
+		Inicializar.iniciarPessoa(pessoaService);
 
 		boolean controle = true;
 		do {
@@ -62,33 +62,38 @@ public class Programa {
 					System.out.print("1. Pessoa ou 2. Aluno? ");
 					int escolhaAtualizar = read.nextInt();
 
-					System.out.print("\nInforme o telefone cadastrado: ");
-					Long atualizarId = read.nextLong();
+					if (escolhaAtualizar == 1 || escolhaAtualizar == 2) {
+						System.out.print("\nInforme o celular cadastrado: ");
+						Long atualizarId = read.nextLong();
 
-					try {
-						if (escolhaAtualizar == 1) {
-							if (pessoaService.readById(atualizarId) == null) {
-								throw new IdInexistente("\nCadastro inexistente.");
-							}
-						} else {
-							if (alunoService.readById(atualizarId) == null) {
-								throw new IdInexistente("\nCadastro inexistente.");
-							}
-						}
-
-						menus.menuAtualizar();
 						try {
-							menus.atualizar(read, pessoaService, alunoService, escolhaAtualizar, atualizarId);
-						} catch (StringIndexOutOfBoundsException e) {
-							System.out.println("\nO número de telefone informado é inválido.");
-						} catch (ParseException e) {
-							System.out.println("\nA data de nascimento informada é inválida.");
-						} catch (InputMismatchException e) {
-							System.out.println("\nNota informada é inválida.");
-							read.next();
+							if (escolhaAtualizar == 1) {
+								if (pessoaService.readByTelefone(atualizarId) == null) {
+									throw new TelefoneInexistente("\nCadastro inexistente.");
+								}
+							} else {
+								if (alunoService.readByTelefone(atualizarId) == null) {
+									throw new TelefoneInexistente("\nCadastro inexistente.");
+								}
+							}
+
+							menus.menuAtualizar();
+							try {
+								menus.atualizar(read, pessoaService, alunoService, escolhaAtualizar, atualizarId);
+							} catch (StringIndexOutOfBoundsException e) {
+								System.out.println("\nO número de celular informado é inválido.");
+							} catch (ParseException e) {
+								System.out.println("\nA data de nascimento informada é inválida.");
+							} catch (InputMismatchException e) {
+								System.out.println("\nNota informada é inválida.");
+								read.next();
+							}
+						} catch (TelefoneInexistente e2) {
+							System.out.println(e2.getMessage());
 						}
-					} catch (IdInexistente e2) {
-						System.out.println(e2.getMessage());
+						break;
+					} else {
+						System.out.println("\nOpção Inválida.");
 					}
 					break;
 				case 4:
@@ -96,7 +101,7 @@ public class Programa {
 					System.out.println("\nDELETAR\n");
 					try {
 						menus.deletar(read, pessoaService, alunoService);
-					} catch (IdInexistente e) {
+					} catch (TelefoneInexistente e) {
 						System.out.println(e.getMessage());
 					}
 					break;
@@ -110,12 +115,11 @@ public class Programa {
 				}
 
 			} catch (InputMismatchException e) {
-				System.out.println("\nOpção escolhida é Inválida.");
+				System.out.println("\nOpção Inválida.");
 				read.next();
 			} catch (NumberFormatException e) {
-				System.out.println("\nO número de telefone informado é inválido. Tente novamente.");
+				System.out.println("\nO número de celular informado é inválido.");
 			} catch (RuntimeException e) {
-				System.out.println("\nUm erro desconhecido ocorreu.");
 				System.out.println(e.getMessage());
 			} finally {
 				Thread.sleep(1500l);

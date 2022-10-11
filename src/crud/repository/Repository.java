@@ -17,7 +17,7 @@ public class Repository<T extends Pessoa> {
 	}
 
 	public void create(T t) {
-			this.BandoDeDados.put(Long.parseLong(t.getTelefone()) , t);	
+			this.BandoDeDados.put(t.getTelefone(), t);	
 	}	
 
 	public T readById(Long chave) {

@@ -7,7 +7,7 @@ import java.util.Scanner;
 import crud.exceptions.CadastroDuplicado;
 import crud.exceptions.CadastroInvalido;
 import crud.exceptions.CadastrosInexistentes;
-import crud.exceptions.IdInexistente;
+import crud.exceptions.TelefoneInexistente;
 import crud.model.Aluno;
 import crud.repository.Repository;
 
@@ -32,12 +32,12 @@ public class AlunoService {
 		}
 	}
 
-	public Aluno readById(Long telefone) {
+	public Aluno readByTelefone(Long telefone) {
 		Aluno buscarId = this.repository.readById(telefone);
 		if (buscarId != null) {
 			return buscarId;
 		} else {
-			throw new IdInexistente("\nCadastro inexistente.");
+			throw new TelefoneInexistente("\nCadastro inexistente.");
 		}
 	}
 
@@ -51,21 +51,21 @@ public class AlunoService {
 	}
 
 	public void update(Long telefone, Aluno aluno) {
-		Aluno atualizar = this.readById(telefone);
+		Aluno atualizar = this.readByTelefone(telefone);
 		if (atualizar != null) {
 			aluno.setDataUltimaAlteracao(new Date());
 			this.repository.update(telefone, aluno);
 		} else {
-			throw new IdInexistente("\nCadastro inexistente.");
+			throw new TelefoneInexistente("\nCadastro inexistente.");
 		}
 	}
 
 	public void remove(Long telefone) {
-		Aluno remover = this.readById(telefone);
+		Aluno remover = this.readByTelefone(telefone);
 		if (remover != null) {
 			this.repository.delete(telefone);
 		} else {
-			throw new IdInexistente("\nCadastro inexistente.");
+			throw new TelefoneInexistente("\nCadastro inexistente.");
 		}
 	}
 

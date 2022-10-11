@@ -31,11 +31,11 @@ public class Pessoa {
 		this.nome = nome;
 	}
 
-	public String getTelefone() {
-		return telefone;
+	public long getTelefone() {
+		return Long.parseLong(telefone);
 	}
 
-	public void setTelefone(String telefone) {
+	public void setTelefone(String telefone) {		
 		this.telefone = telefone;
 	}
 
@@ -92,7 +92,7 @@ public class Pessoa {
 	public String toString() {
 		return "\nPESSOA\n"+
 				"\nNome: " + nome + 
-				"\nTelefone: " + Formatacao.padraoTelefone(telefone) +
+				"\nCelular: " + Formatacao.padraoTelefone(telefone) +
 				"\nData de Nascimento: " + Formatacao.padraoData.format(dataNascimento) + 
 				"\nData de Cadastro: " + Formatacao.padraoData.format(dataCadastro) + 
 				"\nData da Última Alteracao: " + Formatacao.padraoData.format(dataUltimaAlteracao);

@@ -25,7 +25,7 @@ public class Aluno extends Pessoa {
 	public String toString() {
 		return "\nALUNO\n"+
 				"\nNome: " + nome + 
-				"\nTelefone: " + Formatacao.padraoTelefone(telefone) +
+				"\nCelular: " + Formatacao.padraoTelefone(telefone) +
 				"\nData de Nascimento: " + Formatacao.padraoData.format(dataNascimento) + 
 				"\nData de Cadastro: " + Formatacao.padraoData.format(dataCadastro) + 
 				"\nData da Última Alteracao: " + Formatacao.padraoData.format(dataUltimaAlteracao) +

@@ -30,8 +30,8 @@ public class menus {
 		read.nextLine();
 		System.out.print("\nNome: ");
 		String nome = read.nextLine();
-		System.out.print("\nTelefone com DDD (11 digitos): ");
-		String telefone = read.nextLine();
+		System.out.print("\nTelefone com DDD (11 digitos sem separação): ");
+		String celular = read.nextLine();
 		System.out.print("\nData de nascimento (dd/MM/yyyy): ");
 		String dataNascimento = read.nextLine();
 
@@ -40,19 +40,22 @@ public class menus {
 
 		if (resposta == 1 || resposta == 2) {
 			if (resposta == 1) {
-				System.out.print("\nNota Final (Separação com vírgula): ");
+				System.out.print("\nNota Final (Separado com vírgula): ");
 				Double notaFinal = read.nextDouble();
-
-				Aluno aluno = new Aluno(nome, telefone, dataNascimento, notaFinal);
-				if (aluno.getNome().isBlank()) {
-					throw new CadastroInvalido("\nCampo nome está em branco. Cadastro inválido.");
+				if (notaFinal < 0 || notaFinal > 100) {
+					throw new CadastroInvalido("\nNota inválida.");
 				} else {
-					alunoService.create(aluno);
-					System.out.println(aluno);
-					System.out.println("\nCadastro salvo com sucesso.");
+					Aluno aluno = new Aluno(nome, celular, dataNascimento, notaFinal);
+					if (aluno.getNome().isBlank()) {
+						throw new CadastroInvalido("\nCampo nome está em branco. Cadastro inválido.");
+					} else {
+						alunoService.create(aluno);
+						System.out.println(aluno);
+						System.out.println("\nCadastro salvo com sucesso.");
+					}
 				}
 			} else {
-				Pessoa pessoa = new Pessoa(nome, telefone, dataNascimento);
+				Pessoa pessoa = new Pessoa(nome, celular, dataNascimento);
 				if (pessoa.getNome().isBlank()) {
 					throw new CadastroInvalido("\nCampo nome está em branco. Cadastro inválido.");
 				} else {
@@ -74,16 +77,16 @@ public class menus {
 	public static void menuAtualizar() {
 		System.out.println("\nQual dado deseja atualizar?\n");
 		System.out.println("1. Atualizar nome.");
-		System.out.println("2. Atualizar telefone.");
-		System.out.println("3. Atualizar data de nascimento.");
-		System.out.println("4. Atualizar nota final.");
+		System.out.println("2. Atualizar celular com DDD (11 digitos sem separação).");
+		System.out.println("3. Atualizar data de nascimento (dd/MM/yyyy).");
+		System.out.println("4. Atualizar nota final (Separado com vírgula).");
 		System.out.println("5. Atualizar todos os dados.");
 		System.out.println("6. Cancelar operação.");
 		System.out.print("\nDigite a opção desejada: ");
 	}
 
 	public static void atualizar(Scanner read, PessoaService pessoaService, AlunoService alunoService,
-			int escolhaAtualizar, Long atualizarId) throws ParseException {
+			int escolhaAtualizar, Long atualizarTelefone) throws ParseException {
 		int opcoesAtualizar = read.nextInt();
 		switch (opcoesAtualizar) {
 		case 1:
@@ -92,68 +95,75 @@ public class menus {
 			String novoNome = read.nextLine();
 
 			if (escolhaAtualizar == 1) {
-				Pessoa atualizarPessoa = pessoaService.readById(atualizarId);
+				Pessoa atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
 				atualizarPessoa.setNome(novoNome);
-				pessoaService.update(atualizarId, atualizarPessoa);
+				pessoaService.update(atualizarTelefone, atualizarPessoa);
 				System.out.println(atualizarPessoa);
 				System.out.println("\nCadastro de " + atualizarPessoa.getNome() + " atualizado com sucesso.");
 			} else {
-				Aluno atualizarAluno = alunoService.readById(atualizarId);
+				Aluno atualizarAluno = alunoService.readByTelefone(atualizarTelefone);
 				atualizarAluno.setNome(novoNome);
-				alunoService.update(atualizarId, atualizarAluno);
+				alunoService.update(atualizarTelefone, atualizarAluno);
 				System.out.println(atualizarAluno);
 				System.out.println("\nCadastro de " + atualizarAluno.getNome() + " atualizado com sucesso.");
 			}
 			break;
 		case 2:
 			read.nextLine();
-			System.out.print("\nAtualizar telefone: ");
+			System.out.print("\nAtualizar celular (11 digitos sem separação): ");
 			String novoTelefone = read.nextLine();
 
+			try {
+				Long.parseLong(novoTelefone);
+			} catch (NumberFormatException e) {
+				System.out.println("\nO número de celular informado é inválido.");
+				break;
+			}
+
 			if (escolhaAtualizar == 1) {
-				Pessoa atualizarPessoa = pessoaService.readById(atualizarId);
+				Pessoa atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
 				atualizarPessoa.setTelefone(novoTelefone);
-				pessoaService.update(atualizarId, atualizarPessoa);
+				pessoaService.update(atualizarTelefone, atualizarPessoa);
 				System.out.println(atualizarPessoa);
 				System.out.println("\nCadastro de " + atualizarPessoa.getNome() + " atualizado com sucesso.");
 			} else {
-				Aluno atualizarAluno = alunoService.readById(atualizarId);
+				Aluno atualizarAluno = alunoService.readByTelefone(atualizarTelefone);
 				atualizarAluno.setTelefone(novoTelefone);
-				alunoService.update(atualizarId, atualizarAluno);
+				alunoService.update(atualizarTelefone, atualizarAluno);
 				System.out.println(atualizarAluno);
 				System.out.println("\nCadastro de " + atualizarAluno.getNome() + " atualizado com sucesso.");
 			}
 			break;
 		case 3:
 			read.nextLine();
-			System.out.print("\nAtualizar data de nascimento: ");
+			System.out.print("\nAtualizar data de nascimento (dd/MM/yyyy): ");
 			String novaData = read.nextLine();
 
 			if (escolhaAtualizar == 1) {
-				Pessoa atualizarPessoa = pessoaService.readById(atualizarId);
+				Pessoa atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
 				atualizarPessoa.setDataNascimento(Formatacao.padraoData.parse(novaData));
-				pessoaService.update(atualizarId, atualizarPessoa);
+				pessoaService.update(atualizarTelefone, atualizarPessoa);
 				System.out.println(atualizarPessoa);
 				System.out.println("\nCadastro de " + atualizarPessoa.getNome() + " atualizado com sucesso.");
 			} else {
-				Aluno atualizarAluno = alunoService.readById(atualizarId);
+				Aluno atualizarAluno = alunoService.readByTelefone(atualizarTelefone);
 				atualizarAluno.setDataNascimento(Formatacao.padraoData.parse(novaData));
-				alunoService.update(atualizarId, atualizarAluno);
+				alunoService.update(atualizarTelefone, atualizarAluno);
 				System.out.println(atualizarAluno);
 				System.out.println("\nCadastro de " + atualizarAluno.getNome() + " atualizado com sucesso.");
 			}
 			break;
 		case 4:
 			read.nextLine();
-			System.out.print("\nAtualizar nota final: ");
+			System.out.print("\nAtualizar nota final (Separado com vírgula): ");
 			Double novaNota = read.nextDouble();
 
 			if (escolhaAtualizar == 1) {
 				System.out.println("Parâmetro inexistente.");
 			} else {
-				Aluno atualizarAluno = alunoService.readById(atualizarId);
+				Aluno atualizarAluno = alunoService.readByTelefone(atualizarTelefone);
 				atualizarAluno.setNotaFinal(novaNota);
-				alunoService.update(atualizarId, atualizarAluno);
+				alunoService.update(atualizarTelefone, atualizarAluno);
 				System.out.println(atualizarAluno);
 				System.out.println("\nCadastro de " + atualizarAluno.getNome() + " atualizado com sucesso.");
 			}
@@ -162,30 +172,30 @@ public class menus {
 			System.out.print("\nAtualizar nome: ");
 			novoNome = read.nextLine();
 
-			System.out.print("\nAtualizar telefone: ");
+			System.out.print("\nAtualizar celular (11 digitos sem separação): ");
 			novoTelefone = read.nextLine();
 
-			System.out.print("\nAtualizar data de nascimento: ");
+			System.out.print("\nAtualizar data de nascimento (dd/MM/yyyy): ");
 			novaData = read.nextLine();
 
 			if (escolhaAtualizar == 1) {
-				Pessoa atualizarPessoa = pessoaService.readById(atualizarId);
+				Pessoa atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
 				atualizarPessoa.setNome(novoNome);
 				atualizarPessoa.setTelefone(novoTelefone);
 				atualizarPessoa.setDataNascimento(Formatacao.padraoData.parse(novaData));
-				pessoaService.update(atualizarId, atualizarPessoa);
+				pessoaService.update(atualizarTelefone, atualizarPessoa);
 				System.out.println(atualizarPessoa);
 				System.out.println("\nCadastro de " + atualizarPessoa.getNome() + " atualizado com sucesso.");
 			} else {
-				System.out.print("\nAtualizar nota final: ");
+				System.out.print("\nAtualizar nota final (Separado com vírgula): ");
 				novaNota = read.nextDouble();
 
-				Aluno atualizarAluno = alunoService.readById(atualizarId);
+				Aluno atualizarAluno = alunoService.readByTelefone(atualizarTelefone);
 				atualizarAluno.setNome(novoNome);
 				atualizarAluno.setTelefone(novoTelefone);
 				atualizarAluno.setDataNascimento(Formatacao.padraoData.parse(novaData));
 				atualizarAluno.setNotaFinal(novaNota);
-				alunoService.update(atualizarId, atualizarAluno);
+				alunoService.update(atualizarTelefone, atualizarAluno);
 				System.out.println(atualizarAluno);
 				System.out.println("\nCadastro de " + atualizarAluno.getNome() + " atualizado com sucesso.");
 			}
@@ -202,17 +212,23 @@ public class menus {
 		System.out.print("1.Pessoa ou 2.Aluno? ");
 		int escolhaDeletar = read.nextInt();
 
-		System.out.print("\nInforme o telefone cadastrado: ");
-		Long deletar = read.nextLong();
+		if (escolhaDeletar == 1 || escolhaDeletar == 2) {
+			System.out.print("\nInforme o celular cadastrado: ");
+			Long deletar = read.nextLong();
 
-		if (escolhaDeletar == 1) {
-			System.out.println(pessoaService.readById(deletar));
-			System.out.println("\nCadastro de " + pessoaService.readById(deletar).getNome() + " removido com sucesso.");
-			pessoaService.remove(deletar);
+			if (escolhaDeletar == 1) {
+				System.out.println(pessoaService.readByTelefone(deletar));
+				System.out.println(
+						"\nCadastro de " + pessoaService.readByTelefone(deletar).getNome() + " removido com sucesso.");
+				pessoaService.remove(deletar);
+			} else {
+				System.out.println(alunoService.readByTelefone(deletar));
+				System.out.println(
+						"\nCadastro de " + alunoService.readByTelefone(deletar).getNome() + " removido com sucesso.");
+				alunoService.remove(deletar);
+			}
 		} else {
-			System.out.println(alunoService.readById(deletar));
-			System.out.println("\nCadastro de " + alunoService.readById(deletar).getNome() + " removido com sucesso.");
-			alunoService.remove(deletar);
+			System.out.println("\nOpção Inválida.");
 		}
 
 	}
