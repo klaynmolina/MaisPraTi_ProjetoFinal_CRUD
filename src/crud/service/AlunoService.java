@@ -41,12 +41,12 @@ public class AlunoService {
 		}
 	}
 
-	public void readAll() {
+	public List<Aluno> readAll() {
 		List<Aluno> listagem = this.repository.readAll();
 		if (listagem.isEmpty() || listagem == null) {
 			throw new CadastrosInexistentes("\nAinda não existem cadastros.");
 		} else {
-			listagem.stream().map(a -> a + "\n").forEach(System.out::println);
+			return listagem;
 		}
 	}
 

@@ -19,9 +19,9 @@ public class PessoaService {
 	public PessoaService(Scanner read) {
 		this.read = read;
 	}
-
+	
 	public void create(Pessoa pessoa) {
-		if (pessoa != null) {
+		if (pessoa != null) {	
 			if (repository.readAll().contains(pessoa)) {
 				throw new CadastroDuplicado("\nCadastro já existente.");
 			} else {
@@ -41,15 +41,15 @@ public class PessoaService {
 		}
 	}
 
-	public void readAll() {
+	public List<Pessoa> readAll() {
 		List<Pessoa> listagem = this.repository.readAll();
 		if (listagem.isEmpty() || listagem == null) {
 			throw new CadastrosInexistentes("\nAinda não existem cadastros.");
 		} else {
-			listagem.stream().map(a -> a + "\n").forEach(System.out::println);
+			return listagem;
 		}
 	}
-
+	
 	public void update(Long telefone, Pessoa pessoa) {
 		Pessoa atualizar = this.readByTelefone(telefone);
 		if (atualizar != null) {

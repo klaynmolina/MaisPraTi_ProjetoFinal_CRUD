@@ -63,23 +63,29 @@ public class Programa {
 					int escolhaAtualizar = read.nextInt();
 
 					if (escolhaAtualizar == 1 || escolhaAtualizar == 2) {
+						read.nextLine();
 						System.out.print("\nInforme o celular cadastrado: ");
-						Long atualizarId = read.nextLong();
+						String recebeAtualizarTelefone = read.nextLine();
+						
+						if (recebeAtualizarTelefone.isBlank()) {
+							throw new CadastroInvalido("\nCampo inválido, número de celular em branco.");
+						}
 
+						Long atualizarTelefone = read.nextLong();
 						try {
 							if (escolhaAtualizar == 1) {
-								if (pessoaService.readByTelefone(atualizarId) == null) {
+								if (pessoaService.readByTelefone(atualizarTelefone) == null) {
 									throw new TelefoneInexistente("\nCadastro inexistente.");
 								}
 							} else {
-								if (alunoService.readByTelefone(atualizarId) == null) {
+								if (alunoService.readByTelefone(atualizarTelefone) == null) {
 									throw new TelefoneInexistente("\nCadastro inexistente.");
 								}
 							}
 
 							menus.menuAtualizar();
 							try {
-								menus.atualizar(read, pessoaService, alunoService, escolhaAtualizar, atualizarId);
+								menus.atualizar(read, pessoaService, alunoService, escolhaAtualizar, atualizarTelefone);
 							} catch (StringIndexOutOfBoundsException e) {
 								System.out.println("\nO número de celular informado é inválido.");
 							} catch (ParseException e) {

@@ -1,9 +1,11 @@
 package crud.menu;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Scanner;
 
 import crud.complementos.Formatacao;
+import crud.exceptions.CadastroDuplicado;
 import crud.exceptions.CadastroInvalido;
 import crud.model.Aluno;
 import crud.model.Pessoa;
@@ -21,7 +23,13 @@ public class menus {
 		System.out.println("4. Deletar.");
 		System.out.println("0. Encerrar sistema.");
 		System.out.print("\nDigite a opção desejada: ");
-		int iniciarControle = read.nextInt();
+		String recebeControle = read.nextLine();
+		
+		if (recebeControle.isBlank()) {
+			throw new CadastroInvalido("\nOpção inválida. Opção escolhida está em branco.");
+		}
+		
+		int iniciarControle = Integer.parseInt(recebeControle);		
 		return iniciarControle;
 	}
 
@@ -30,39 +38,59 @@ public class menus {
 		read.nextLine();
 		System.out.print("\nNome: ");
 		String nome = read.nextLine();
+
+		if (nome.isBlank()) {
+			throw new CadastroInvalido("\nCadastro inválido. Campo nome em branco.");
+		}
+
 		System.out.print("\nTelefone com DDD (11 digitos sem separação): ");
 		String celular = read.nextLine();
+		
+		if(verificarCadastros(celular, pessoaService, alunoService)) {
+			throw new CadastroDuplicado("\nCadastro inválido. Número informado já vinculado a outro cadastro.");
+		}
+		
+		
+		if (celular.isBlank()) {
+			throw new CadastroInvalido("\nCadastro inválido. Campo celular em branco.");
+		} else if (celular.length() != 11) {
+			throw new CadastroInvalido("\nCadastro inválido. O número de celular informado é inválido.");
+		} 
+
 		System.out.print("\nData de nascimento (dd/MM/yyyy): ");
 		String dataNascimento = read.nextLine();
+
+		if (dataNascimento.isBlank()) {
+			throw new CadastroInvalido("\nCadastro inválido. Campo data de nascimento em branco.");
+		}
 
 		System.out.print("\nDeseja informar nota final do curso? 1. Sim / 2. Não ");
 		int resposta = read.nextInt();
 
 		if (resposta == 1 || resposta == 2) {
 			if (resposta == 1) {
-				System.out.print("\nNota Final (Separado com vírgula): ");
-				Double notaFinal = read.nextDouble();
+				read.nextLine();
+				System.out.print("\nNota Final (Separado com ponto): ");
+				String recebeNota = read.nextLine();
+				
+				if (recebeNota.isBlank()) {
+					throw new CadastroInvalido("\nCadastro inválido. Campo nota em branco.");
+				}
+				
+				Double notaFinal = Double.parseDouble(recebeNota);				
 				if (notaFinal < 0 || notaFinal > 100) {
 					throw new CadastroInvalido("\nNota inválida.");
 				} else {
 					Aluno aluno = new Aluno(nome, celular, dataNascimento, notaFinal);
-					if (aluno.getNome().isBlank()) {
-						throw new CadastroInvalido("\nCampo nome está em branco. Cadastro inválido.");
-					} else {
-						alunoService.create(aluno);
-						System.out.println(aluno);
-						System.out.println("\nCadastro salvo com sucesso.");
-					}
+					alunoService.create(aluno);
+					System.out.println(aluno);
+					System.out.println("\nCadastro salvo com sucesso.");
 				}
 			} else {
 				Pessoa pessoa = new Pessoa(nome, celular, dataNascimento);
-				if (pessoa.getNome().isBlank()) {
-					throw new CadastroInvalido("\nCampo nome está em branco. Cadastro inválido.");
-				} else {
-					pessoaService.create(pessoa);
-					System.out.println(pessoa);
-					System.out.println("\nCadastro salvo com sucesso.");
-				}
+				pessoaService.create(pessoa);
+				System.out.println(pessoa);
+				System.out.println("\nCadastro salvo com sucesso.");
 			}
 		} else {
 			System.out.println("\nOpção Inválida.");
@@ -70,16 +98,33 @@ public class menus {
 	}
 
 	public static void todosOsCadastros(PessoaService pessoaService, AlunoService alunoService) {
-		pessoaService.readAll();
-		alunoService.readAll();
+		pessoaService.readAll().stream().map(a -> a + "\n").forEach(System.out::println);
+		alunoService.readAll().stream().map(a -> a + "\n").forEach(System.out::println);		
 	}
-
+	
+	public static boolean verificarCadastros(String telefone, PessoaService pessoaService, AlunoService alunoService) {
+		List<Pessoa> pessoas = pessoaService.readAll();
+		List<Aluno> alunos = alunoService.readAll();
+		
+		for(Pessoa p: pessoas) {
+			if(Long.parseLong(telefone) == p.getTelefone()) {
+				return true;
+			}
+		}
+		for(Aluno a: alunos ) {
+			if(Long.parseLong(telefone) == a.getTelefone()) {
+				return true;
+			}
+		}
+		return false;		
+	}
+	
 	public static void menuAtualizar() {
 		System.out.println("\nQual dado deseja atualizar?\n");
 		System.out.println("1. Atualizar nome.");
 		System.out.println("2. Atualizar celular com DDD (11 digitos sem separação).");
 		System.out.println("3. Atualizar data de nascimento (dd/MM/yyyy).");
-		System.out.println("4. Atualizar nota final (Separado com vírgula).");
+		System.out.println("4. Atualizar nota final (Separado com ponto).");
 		System.out.println("5. Atualizar todos os dados.");
 		System.out.println("6. Cancelar operação.");
 		System.out.print("\nDigite a opção desejada: ");
@@ -93,6 +138,10 @@ public class menus {
 			read.nextLine();
 			System.out.print("\nAtualizar nome: ");
 			String novoNome = read.nextLine();
+			
+			if (novoNome.isBlank()) {
+				throw new CadastroInvalido("\nCadastro inválido. Campo nome em branco.");
+			}
 
 			if (escolhaAtualizar == 1) {
 				Pessoa atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
@@ -112,6 +161,14 @@ public class menus {
 			read.nextLine();
 			System.out.print("\nAtualizar celular (11 digitos sem separação): ");
 			String novoTelefone = read.nextLine();
+			
+			if (novoTelefone.isBlank()) {
+				throw new CadastroInvalido("\nCadastro inválido. Campo celular em branco.");
+			}
+			
+			if(verificarCadastros(novoTelefone, pessoaService, alunoService)) {
+				throw new CadastroDuplicado("\nCadastro inválido. Número informado já vinculado a outro cadastro.");
+			}
 
 			try {
 				Long.parseLong(novoTelefone);
@@ -138,6 +195,10 @@ public class menus {
 			read.nextLine();
 			System.out.print("\nAtualizar data de nascimento (dd/MM/yyyy): ");
 			String novaData = read.nextLine();
+			
+			if (novaData.isBlank()) {
+				throw new CadastroInvalido("\nCadastro inválido. Campo data de nascimento em branco.");
+			}
 
 			if (escolhaAtualizar == 1) {
 				Pessoa atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
@@ -155,11 +216,16 @@ public class menus {
 			break;
 		case 4:
 			read.nextLine();
-			System.out.print("\nAtualizar nota final (Separado com vírgula): ");
-			Double novaNota = read.nextDouble();
-
+			System.out.print("\nAtualizar nota final (Separado com ponto): ");
+			String recebeNota = read.nextLine();
+			
+			if (recebeNota.isBlank()) {
+				throw new CadastroInvalido("\nCadastro inválido. Campo nota em branco.");
+			}
+			
+			Double novaNota = Double.parseDouble(recebeNota);	
 			if (escolhaAtualizar == 1) {
-				System.out.println("Parâmetro inexistente.");
+				System.out.println("\nParâmetro inexistente em cadastro tipo pessoa.");
 			} else {
 				Aluno atualizarAluno = alunoService.readByTelefone(atualizarTelefone);
 				atualizarAluno.setNotaFinal(novaNota);
@@ -171,12 +237,28 @@ public class menus {
 		case 5:
 			System.out.print("\nAtualizar nome: ");
 			novoNome = read.nextLine();
+			
+			if (novoNome.isBlank()) {
+				throw new CadastroInvalido("\nCadastro inválido. Campo nome em branco.");
+			}
 
 			System.out.print("\nAtualizar celular (11 digitos sem separação): ");
 			novoTelefone = read.nextLine();
+			
+			if (novoTelefone.isBlank()) {
+				throw new CadastroInvalido("\nCadastro inválido. Campo celular em branco.");
+			}
+			
+			if(verificarCadastros(novoTelefone, pessoaService, alunoService)) {
+				throw new CadastroDuplicado("\nCadastro inválido. Número informado já vinculado a outro cadastro.");
+			}
 
 			System.out.print("\nAtualizar data de nascimento (dd/MM/yyyy): ");
 			novaData = read.nextLine();
+			
+			if (novaData.isBlank()) {
+				throw new CadastroInvalido("\nCadastro inválido. Campo data de nascimento em branco.");
+			}
 
 			if (escolhaAtualizar == 1) {
 				Pessoa atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
@@ -188,7 +270,13 @@ public class menus {
 				System.out.println("\nCadastro de " + atualizarPessoa.getNome() + " atualizado com sucesso.");
 			} else {
 				System.out.print("\nAtualizar nota final (Separado com vírgula): ");
-				novaNota = read.nextDouble();
+				recebeNota = read.nextLine();
+				
+				if (recebeNota.isBlank()) {
+					throw new CadastroInvalido("\nCadastro inválido. Campo nota em branco.");
+				}
+				
+				novaNota = Double.parseDouble(recebeNota);	
 
 				Aluno atualizarAluno = alunoService.readByTelefone(atualizarTelefone);
 				atualizarAluno.setNome(novoNome);
@@ -213,8 +301,15 @@ public class menus {
 		int escolhaDeletar = read.nextInt();
 
 		if (escolhaDeletar == 1 || escolhaDeletar == 2) {
-			System.out.print("\nInforme o celular cadastrado: ");
-			Long deletar = read.nextLong();
+			read.nextLine();
+			System.out.print("\nInforme o celular cadastrado: ");			
+			String recebeDeletar = read.nextLine();
+			
+			if (recebeDeletar.isBlank()) {
+				throw new CadastroInvalido("\nCampo inválido, número de celular em branco.");
+			}
+
+			Long deletar = Long.parseLong(recebeDeletar);
 
 			if (escolhaDeletar == 1) {
 				System.out.println(pessoaService.readByTelefone(deletar));
