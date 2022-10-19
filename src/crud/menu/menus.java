@@ -35,7 +35,6 @@ public class menus {
 
 	public static void cadastrar(Scanner read, PessoaService pessoaService, AlunoService alunoService)
 			throws ParseException {
-		read.nextLine();
 		System.out.print("\nNome: ");
 		String nome = read.nextLine();
 
@@ -65,11 +64,11 @@ public class menus {
 		}
 
 		System.out.print("\nDeseja informar nota final do curso? 1. Sim / 2. Não ");
-		int resposta = read.nextInt();
+		String recebeResposta = read.nextLine();
+		int resposta = Integer.parseInt(recebeResposta);
 
 		if (resposta == 1 || resposta == 2) {
 			if (resposta == 1) {
-				read.nextLine();
 				System.out.print("\nNota Final (Separado com ponto): ");
 				String recebeNota = read.nextLine();
 				
@@ -132,10 +131,10 @@ public class menus {
 
 	public static void atualizar(Scanner read, PessoaService pessoaService, AlunoService alunoService,
 			int escolhaAtualizar, Long atualizarTelefone) throws ParseException {
-		int opcoesAtualizar = read.nextInt();
+		String recebeOpcoesAtualizar = read.nextLine();
+		int opcoesAtualizar = Integer.parseInt(recebeOpcoesAtualizar);
 		switch (opcoesAtualizar) {
-		case 1:
-			read.nextLine();
+		case 1:			
 			System.out.print("\nAtualizar nome: ");
 			String novoNome = read.nextLine();
 			
@@ -158,7 +157,6 @@ public class menus {
 			}
 			break;
 		case 2:
-			read.nextLine();
 			System.out.print("\nAtualizar celular (11 digitos sem separação): ");
 			String novoTelefone = read.nextLine();
 			
@@ -192,7 +190,6 @@ public class menus {
 			}
 			break;
 		case 3:
-			read.nextLine();
 			System.out.print("\nAtualizar data de nascimento (dd/MM/yyyy): ");
 			String novaData = read.nextLine();
 			
@@ -215,7 +212,6 @@ public class menus {
 			}
 			break;
 		case 4:
-			read.nextLine();
 			System.out.print("\nAtualizar nota final (Separado com ponto): ");
 			String recebeNota = read.nextLine();
 			
@@ -298,10 +294,10 @@ public class menus {
 
 	public static void deletar(Scanner read, PessoaService pessoaService, AlunoService alunoService) {
 		System.out.print("1.Pessoa ou 2.Aluno? ");
-		int escolhaDeletar = read.nextInt();
+		String recebeEscolhaDeletar = read.nextLine();
+		int escolhaDeletar = Integer.parseInt(recebeEscolhaDeletar);
 
-		if (escolhaDeletar == 1 || escolhaDeletar == 2) {
-			read.nextLine();
+		if (escolhaDeletar == 1 || escolhaDeletar == 2) {			
 			System.out.print("\nInforme o celular cadastrado: ");			
 			String recebeDeletar = read.nextLine();
 			
@@ -310,7 +306,6 @@ public class menus {
 			}
 
 			Long deletar = Long.parseLong(recebeDeletar);
-
 			if (escolhaDeletar == 1) {
 				System.out.println(pessoaService.readByTelefone(deletar));
 				System.out.println(

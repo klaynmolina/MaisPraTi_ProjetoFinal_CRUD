@@ -29,7 +29,8 @@ public class Programa {
 		boolean controle = true;
 		do {
 			try {
-				int iniciarControle = menus.menuInicial(read);
+				String recebeControle = String.valueOf(menus.menuInicial(read));
+				int iniciarControle = Integer.parseInt(recebeControle);
 
 				switch (iniciarControle) {
 				case 1:
@@ -60,10 +61,10 @@ public class Programa {
 					System.out.println("\n*******************************");
 					System.out.println("\nATUALIZAR DADOS\n");
 					System.out.print("1. Pessoa ou 2. Aluno? ");
-					int escolhaAtualizar = read.nextInt();
+					String recebeEscolhaAtualizar = read.nextLine();
+					int escolhaAtualizar = Integer.parseInt(recebeEscolhaAtualizar);
 
 					if (escolhaAtualizar == 1 || escolhaAtualizar == 2) {
-						read.nextLine();
 						System.out.print("\nInforme o celular cadastrado: ");
 						String recebeAtualizarTelefone = read.nextLine();
 						
@@ -71,20 +72,16 @@ public class Programa {
 							throw new CadastroInvalido("\nCampo inválido, número de celular em branco.");
 						}
 
-						Long atualizarTelefone = read.nextLong();
+						Long atualizarTelefone = Long.parseLong(recebeAtualizarTelefone);
 						try {
 							if (escolhaAtualizar == 1) {
-								if (pessoaService.readByTelefone(atualizarTelefone) == null) {
-									throw new TelefoneInexistente("\nCadastro inexistente.");
-								}
+								pessoaService.readByTelefone(atualizarTelefone);
 							} else {
-								if (alunoService.readByTelefone(atualizarTelefone) == null) {
-									throw new TelefoneInexistente("\nCadastro inexistente.");
-								}
+								alunoService.readByTelefone(atualizarTelefone);
 							}
 
 							menus.menuAtualizar();
-							try {
+							try {								
 								menus.atualizar(read, pessoaService, alunoService, escolhaAtualizar, atualizarTelefone);
 							} catch (StringIndexOutOfBoundsException e) {
 								System.out.println("\nO número de celular informado é inválido.");
@@ -96,7 +93,7 @@ public class Programa {
 							}
 						} catch (TelefoneInexistente e2) {
 							System.out.println(e2.getMessage());
-						}
+						}						
 						break;
 					} else {
 						System.out.println("\nOpção Inválida.");
@@ -124,7 +121,8 @@ public class Programa {
 				System.out.println("\nOpção Inválida.");
 				read.next();
 			} catch (NumberFormatException e) {
-				System.out.println("\nO número de celular informado é inválido.");
+//				System.out.println("\nO número de celular informado é inválido.");
+				System.out.println("\nInserção de dados inválida.");
 			} catch (RuntimeException e) {
 				System.out.println(e.getMessage());
 			} finally {
