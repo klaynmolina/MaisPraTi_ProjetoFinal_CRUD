@@ -8,19 +8,19 @@ import crud.exceptions.CadastroDuplicado;
 import crud.exceptions.CadastroInvalido;
 import crud.exceptions.CadastrosInexistentes;
 import crud.exceptions.TelefoneInexistente;
-import crud.model.Pessoa;
+import crud.model.Usuario;
 import crud.repository.Repository;
 
 public class PessoaService {
 
 	Scanner read;
-	Repository<Pessoa> repository = new Repository<>();
+	Repository<Usuario> repository = new Repository<>();
 
 	public PessoaService(Scanner read) {
 		this.read = read;
 	}
 	
-	public void create(Pessoa pessoa) {
+	public void create(Usuario pessoa) {
 		if (pessoa != null) {	
 			if (repository.readAll().contains(pessoa)) {
 				throw new CadastroDuplicado("\nCadastro já existente.");
@@ -32,8 +32,8 @@ public class PessoaService {
 		}
 	}
 
-	public Pessoa readByTelefone(Long telefone) {
-		Pessoa buscarId = this.repository.readById(telefone);
+	public Usuario readByTelefone(Long telefone) {
+		Usuario buscarId = this.repository.readById(telefone);
 		if (buscarId != null) {
 			return buscarId;
 		} else {
@@ -41,8 +41,8 @@ public class PessoaService {
 		}
 	}
 
-	public List<Pessoa> readAll() {
-		List<Pessoa> listagem = this.repository.readAll();
+	public List<Usuario> readAll() {
+		List<Usuario> listagem = this.repository.readAll();
 		if (listagem.isEmpty() || listagem == null) {
 			throw new CadastrosInexistentes("\nAinda não existem cadastros.");
 		} else {
@@ -50,8 +50,8 @@ public class PessoaService {
 		}
 	}
 	
-	public void update(Long telefone, Pessoa pessoa) {
-		Pessoa atualizar = this.readByTelefone(telefone);
+	public void update(Long telefone, Usuario pessoa) {
+		Usuario atualizar = this.readByTelefone(telefone);
 		if (atualizar != null) {
 			pessoa.setDataUltimaAlteracao(new Date());
 			this.repository.update(telefone, pessoa);
@@ -61,7 +61,7 @@ public class PessoaService {
 	}
 
 	public void remove(Long telefone) {
-		Pessoa remover = this.readByTelefone(telefone);
+		Usuario remover = this.readByTelefone(telefone);
 		if (remover != null) {
 			this.repository.delete(telefone);
 		} else {

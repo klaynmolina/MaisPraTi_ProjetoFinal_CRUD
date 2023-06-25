@@ -5,10 +5,10 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import crud.model.Pessoa;
+import crud.model.Usuario;
 
 
-public class Repository<T extends Pessoa> {
+public class Repository<T extends Usuario> {
 
 	Map<Long, T> BandoDeDados;
 

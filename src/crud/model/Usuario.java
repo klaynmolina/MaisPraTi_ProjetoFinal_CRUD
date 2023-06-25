@@ -5,7 +5,7 @@ import java.util.Date;
 
 import crud.complementos.Formatacao;
 
-public class Pessoa { 
+public class Usuario { 
 	
 	protected String nome;
 	protected String telefone;
@@ -14,7 +14,7 @@ public class Pessoa {
 	protected Date dataUltimaAlteracao;	
 	
 	
-	public Pessoa(String nome, String telefone, String dataNascimento) throws ParseException {
+	public Usuario(String nome, String telefone, String dataNascimento) throws ParseException {
 		super();
 		this.nome = nome;
 		this.telefone = telefone;
@@ -79,7 +79,7 @@ public class Pessoa {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Pessoa other = (Pessoa) obj;
+		Usuario other = (Usuario) obj;
 		if (telefone == null) {
 			if (other.telefone != null)
 				return false;

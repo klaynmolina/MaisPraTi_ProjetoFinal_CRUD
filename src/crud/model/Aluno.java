@@ -4,7 +4,7 @@ import java.text.ParseException;
 
 import crud.complementos.Formatacao;
 
-public class Aluno extends Pessoa {
+public class Aluno extends Usuario {
 	
 	private Double notaFinal;
 

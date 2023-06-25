@@ -8,7 +8,7 @@ import crud.complementos.Formatacao;
 import crud.exceptions.CadastroDuplicado;
 import crud.exceptions.CadastroInvalido;
 import crud.model.Aluno;
-import crud.model.Pessoa;
+import crud.model.Usuario;
 import crud.service.AlunoService;
 import crud.service.PessoaService;
 
@@ -86,7 +86,7 @@ public class menus {
 					System.out.println("\nCadastro salvo com sucesso.");
 				}
 			} else {
-				Pessoa pessoa = new Pessoa(nome, celular, dataNascimento);
+				Usuario pessoa = new Usuario(nome, celular, dataNascimento);
 				pessoaService.create(pessoa);
 				System.out.println(pessoa);
 				System.out.println("\nCadastro salvo com sucesso.");
@@ -102,10 +102,10 @@ public class menus {
 	}
 	
 	public static boolean verificarCadastros(String telefone, PessoaService pessoaService, AlunoService alunoService) {
-		List<Pessoa> pessoas = pessoaService.readAll();
+		List<Usuario> pessoas = pessoaService.readAll();
 		List<Aluno> alunos = alunoService.readAll();
 		
-		for(Pessoa p: pessoas) {
+		for(Usuario p: pessoas) {
 			if(Long.parseLong(telefone) == p.getTelefone()) {
 				return true;
 			}
@@ -143,7 +143,7 @@ public class menus {
 			}
 
 			if (escolhaAtualizar == 1) {
-				Pessoa atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
+				Usuario atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
 				atualizarPessoa.setNome(novoNome);
 				pessoaService.update(atualizarTelefone, atualizarPessoa);
 				System.out.println(atualizarPessoa);
@@ -176,7 +176,7 @@ public class menus {
 			}
 
 			if (escolhaAtualizar == 1) {
-				Pessoa atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
+				Usuario atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
 				atualizarPessoa.setTelefone(novoTelefone);
 				pessoaService.update(atualizarTelefone, atualizarPessoa);
 				System.out.println(atualizarPessoa);
@@ -198,7 +198,7 @@ public class menus {
 			}
 
 			if (escolhaAtualizar == 1) {
-				Pessoa atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
+				Usuario atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
 				atualizarPessoa.setDataNascimento(Formatacao.padraoData.parse(novaData));
 				pessoaService.update(atualizarTelefone, atualizarPessoa);
 				System.out.println(atualizarPessoa);
@@ -257,7 +257,7 @@ public class menus {
 			}
 
 			if (escolhaAtualizar == 1) {
-				Pessoa atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
+				Usuario atualizarPessoa = pessoaService.readByTelefone(atualizarTelefone);
 				atualizarPessoa.setNome(novoNome);
 				atualizarPessoa.setTelefone(novoTelefone);
 				atualizarPessoa.setDataNascimento(Formatacao.padraoData.parse(novaData));
